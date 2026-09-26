@@ -2,7 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, inject, signal, WritableSignal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import LoginFormInterface from '@model/login-form.nterface';
+import LoginFormInterface from '@model/login-form.interface';
 import AuthService from '@services/auth.service';
 import { finalize } from 'rxjs';
 

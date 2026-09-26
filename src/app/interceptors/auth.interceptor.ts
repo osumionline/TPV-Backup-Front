@@ -3,10 +3,7 @@ import { inject } from '@angular/core';
 import API_BASE_URL from '@constants/api.config';
 import TokenStorageService from '@services/token-storage.service';
 
-export const authInterceptor: HttpInterceptorFn = (
-  req: HttpRequest<unknown>,
-  next: HttpHandlerFn,
-) => {
+const authInterceptor: HttpInterceptorFn = (req: HttpRequest<unknown>, next: HttpHandlerFn) => {
   const tokenStorage: TokenStorageService = inject(TokenStorageService);
   const token: string | null = tokenStorage.token();
 
@@ -26,3 +23,5 @@ export const authInterceptor: HttpInterceptorFn = (
     }),
   );
 };
+
+export default authInterceptor;

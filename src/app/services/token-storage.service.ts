@@ -8,8 +8,15 @@ export default class TokenStorageService {
   readonly token: Signal<string | null> = this.tokenState.asReadonly();
 
   setToken(token: string): void {
-    sessionStorage.setItem(this.storageKey, token);
-    this.tokenState.set(token);
+    const cleanToken: string = token.trim();
+
+    if (cleanToken === '') {
+      this.clear();
+      return;
+    }
+
+    sessionStorage.setItem(this.storageKey, cleanToken);
+    this.tokenState.set(cleanToken);
   }
 
   clear(): void {
