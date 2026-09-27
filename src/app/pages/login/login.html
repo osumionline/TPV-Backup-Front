@@ -1,61 +1,105 @@
 <main class="login">
-  <section class="login__card">
-    <header class="login__header">
-      <p class="login__eyebrow">Osumi</p>
-      <h1>TPV Backup</h1>
-      <p>Administración de copias de seguridad</p>
-    </header>
+  <mat-card class="login__card"
+            appearance="outlined">
+    <mat-card-header class="login__header">
+      <div class="login__brand">
+        <div class="login__icon"
+             aria-hidden="true">
+          <mat-icon fontSet="material-symbols-outlined">cloud_upload</mat-icon>
+        </div>
 
-    <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
-      <label class="field">
-        <span>Email</span>
-        <input
-          type="email"
-          formControlName="email"
-          autocomplete="username"
-          placeholder="admin@ejemplo.com"
-        />
-      </label>
+        <div>
+          <p class="login__eyebrow">Osumi</p>
+          <mat-card-title>TPV Backup</mat-card-title>
+          <mat-card-subtitle>Administración de copias de seguridad</mat-card-subtitle>
+        </div>
+      </div>
+    </mat-card-header>
 
-      @if (
-        form.controls.email.touched &&
-        form.controls.email.hasError('required')
-      ) {
-        <p class="field-error">Introduce el email.</p>
-      } @else if (
-        form.controls.email.touched &&
-        form.controls.email.hasError('email')
-      ) {
-        <p class="field-error">Introduce un email válido.</p>
-      }
+    <mat-card-content>
+      <form class="login__form"
+            [formRoot]="loginForm">
+        <mat-form-field appearance="outline">
+          <mat-label>Email</mat-label>
 
-      <label class="field">
-        <span>Contraseña</span>
-        <input
-          type="password"
-          formControlName="password"
-          autocomplete="current-password"
-        />
-      </label>
+          <mat-icon matPrefix
+                    fontSet="material-symbols-outlined">
+            mail
+          </mat-icon>
 
-      @if (
-        form.controls.password.touched &&
-        form.controls.password.hasError('required')
-      ) {
-        <p class="field-error">Introduce la contraseña.</p>
-      }
+          <input matInput
+                 type="email"
+                 autocomplete="username"
+                 [formField]="loginForm.email" />
 
-      @if (error(); as errorMessage) {
-        <p class="login-error" role="alert">{{ errorMessage }}</p>
-      }
+          @if (loginForm.email().touched() && loginForm.email().invalid()) {
+          <mat-error>
+            {{ loginForm.email().errors()[0].message }}
+          </mat-error>
+          }
+        </mat-form-field>
 
-      <button type="submit" [disabled]="loading()">
-        @if (loading()) {
-          Accediendo...
-        } @else {
-          Acceder
+        <mat-form-field appearance="outline">
+          <mat-label>Contraseña</mat-label>
+
+          <mat-icon matPrefix
+                    fontSet="material-symbols-outlined">
+            lock
+          </mat-icon>
+
+          <input matInput
+                 [type]="passwordType()"
+                 autocomplete="current-password"
+                 [formField]="loginForm.password" />
+
+          <button mat-icon-button
+                  matSuffix
+                  type="button"
+                  [attr.aria-label]="passwordToggleLabel()"
+                  [attr.title]="passwordToggleLabel()"
+                  (click)="togglePasswordVisibility()">
+            <mat-icon fontSet="material-symbols-outlined">
+              {{ passwordIcon() }}
+            </mat-icon>
+          </button>
+
+          @if (loginForm.password().touched() && loginForm.password().invalid()) {
+          <mat-error>
+            {{ loginForm.password().errors()[0].message }}
+          </mat-error>
+          }
+        </mat-form-field>
+
+        @for (error of loginForm().errors(); track error.kind) {
+        <div class="login__error"
+             role="alert">
+          <mat-icon aria-hidden="true"
+                    fontSet="material-symbols-outlined">
+            error
+          </mat-icon>
+
+          <span>{{ error.message }}</span>
+        </div>
         }
-      </button>
-    </form>
-  </section>
+
+        <button class="login__submit"
+                mat-flat-button
+                type="submit"
+                [disabled]="loginForm().submitting()">
+          @if (loginForm().submitting()) {
+          <span class="login__submit-content">
+            <mat-spinner diameter="20" />
+            <span>Accediendo...</span>
+          </span>
+          } @else {
+          <mat-icon fontSet="material-symbols-outlined">login</mat-icon>
+          }
+
+          @if (!loginForm().submitting()) {
+          <span>Acceder</span>
+          }
+        </button>
+      </form>
+    </mat-card-content>
+  </mat-card>
 </main>
