@@ -96,7 +96,11 @@
               *matHeaderCellDef>Caducidad</th>
           <td mat-cell
               *matCellDef="let subscription">
-            {{ subscription.expiresAt ?? 'Sin caducidad' }}
+            @if (subscription.expiresAt) {
+            {{ subscription.expiresAt | date: 'dd-MM-yyyy' }}
+            } @else {
+            Sin caducidad
+            }
           </td>
         </ng-container>
 
@@ -127,7 +131,10 @@
           <td mat-cell
               *matCellDef="let subscription"
               class="actions-cell">
-            @if (changingActivePublicId() === subscription.publicId) {
+            @if (
+            changingActivePublicId() === subscription.publicId ||
+            deletingPublicId() === subscription.publicId
+            ) {
             <mat-spinner diameter="22" />
             } @else {
             <button mat-icon-button
@@ -155,6 +162,24 @@
               <mat-icon fontSet="material-symbols-outlined">check_circle</mat-icon>
             </button>
             }
+
+            <span [matTooltip]="
+              subscription.installationCount > 0
+                ? 'No se puede eliminar mientras tenga instalaciones'
+                : 'Eliminar suscripción'
+            ">
+              <button mat-icon-button
+                      type="button"
+                      [disabled]="subscription.installationCount > 0"
+                      [attr.aria-label]="
+                        subscription.installationCount > 0
+                          ? 'No se puede eliminar la suscripción porque tiene instalaciones'
+                          : 'Eliminar suscripción'
+                      "
+                      (click)="confirmDelete(subscription)">
+                <mat-icon fontSet="material-symbols-outlined">delete</mat-icon>
+              </button>
+            </span>
             }
           </td>
         </ng-container>

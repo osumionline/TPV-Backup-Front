@@ -3,6 +3,8 @@ import { inject, Service } from '@angular/core';
 import API_BASE_URL from '@constants/api.config';
 import CreateSubscriptionRequestInterface from '@model/create-subscription-request.interface';
 import CreateSubscriptionResponseInterface from '@model/create-subscription-response.interface';
+import DeleteSubscriptionRequestInterface from '@model/delete-subscription-request.interface';
+import DeleteSubscriptionResponseInterface from '@model/delete-subscription-response.interface';
 import GetSubscriptionsResponseInterface from '@model/get-subscriptions-response.interface';
 import SetSubscriptionActiveRequestInterface from '@model/set-subscription-active-request.interface';
 import SetSubscriptionActiveResponseInterface from '@model/set-subscription-active-response.interface';
@@ -67,6 +69,22 @@ export default class SubscriptionService {
   ): Observable<SetSubscriptionActiveResponseInterface> {
     return this.http.post<SetSubscriptionActiveResponseInterface>(
       `${API_BASE_URL}/admin/subscriptions/set-active`,
+      data,
+    );
+  }
+
+  /**
+   * Deletes a subscription without registered installations.
+   *
+   * @param data Subscription identifier to delete.
+   *
+   * @returns Observable with the deletion response.
+   */
+  delete(
+    data: DeleteSubscriptionRequestInterface,
+  ): Observable<DeleteSubscriptionResponseInterface> {
+    return this.http.post<DeleteSubscriptionResponseInterface>(
+      `${API_BASE_URL}/admin/subscriptions/delete`,
       data,
     );
   }

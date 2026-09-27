@@ -1,3 +1,5 @@
+import { DatePipe } from '@angular/common';
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, inject, OnInit, signal, WritableSignal } from '@angular/core';
 import { MatButton, MatIconButton } from '@angular/material/button';
 import { MatCard } from '@angular/material/card';
@@ -21,6 +23,8 @@ import { MatTooltip } from '@angular/material/tooltip';
 import ConfirmDialog from '@components/confirm-dialog/confirm-dialog';
 import SubscriptionDialog from '@components/subscription-dialog/subscription-dialog';
 import ConfirmDialogDataInterface from '@model/confirm-dialog-data.interface';
+import DeleteSubscriptionRequestInterface from '@model/delete-subscription-request.interface';
+import DeleteSubscriptionResponseInterface from '@model/delete-subscription-response.interface';
 import GetSubscriptionsResponseInterface from '@model/get-subscriptions-response.interface';
 import SetSubscriptionActiveRequestInterface from '@model/set-subscription-active-request.interface';
 import SetSubscriptionActiveResponseInterface from '@model/set-subscription-active-response.interface';
@@ -47,6 +51,7 @@ import SubscriptionService from '@services/subscription.service';
     MatRowDef,
     MatTable,
     MatTooltip,
+    DatePipe,
   ],
   templateUrl: './subscriptions.html',
   styleUrl: './subscriptions.scss',
@@ -60,6 +65,7 @@ export default class Subscriptions implements OnInit {
   readonly loading: WritableSignal<boolean> = signal(true);
   readonly error: WritableSignal<string | null> = signal(null);
   readonly changingActivePublicId: WritableSignal<string | null> = signal(null);
+  readonly deletingPublicId: WritableSignal<string | null> = signal(null);
 
   readonly displayedColumns: string[] = [
     'name',
@@ -169,6 +175,109 @@ export default class Subscriptions implements OnInit {
       if (confirmed === true) {
         this.changeActiveState(subscription, false);
       }
+    });
+  }
+
+  /**
+   * Opens a confirmation dialog before deleting a subscription.
+   *
+   * @param subscription Subscription to delete.
+   *
+   * @returns void
+   */
+  confirmDelete(subscription: SubscriptionInterface): void {
+    if (subscription.installationCount > 0) {
+      return;
+    }
+
+    const data: ConfirmDialogDataInterface = {
+      title: 'Eliminar suscripción',
+      message:
+        `¿Quieres eliminar definitivamente la suscripción "${subscription.name}"? ` +
+        'Esta acción no se puede deshacer.',
+      confirmLabel: 'Eliminar',
+      cancelLabel: 'Cancelar',
+    };
+
+    const dialogRef: MatDialogRef<ConfirmDialog, boolean> = this.dialog.open<
+      ConfirmDialog,
+      ConfirmDialogDataInterface,
+      boolean
+    >(ConfirmDialog, {
+      width: '480px',
+      maxWidth: 'calc(100vw - 32px)',
+      data,
+    });
+
+    dialogRef.afterClosed().subscribe((confirmed: boolean | undefined) => {
+      if (confirmed === true) {
+        this.deleteSubscription(subscription);
+      }
+    });
+  }
+
+  /**
+   * Deletes a subscription from the API and reloads the subscriptions list.
+   *
+   * @param subscription Subscription to delete.
+   *
+   * @returns void
+   */
+  private deleteSubscription(subscription: SubscriptionInterface): void {
+    if (this.deletingPublicId() !== null) {
+      return;
+    }
+
+    const request: DeleteSubscriptionRequestInterface = {
+      publicId: subscription.publicId,
+    };
+
+    this.deletingPublicId.set(subscription.publicId);
+
+    this.subscriptionService.delete(request).subscribe({
+      next: (response: DeleteSubscriptionResponseInterface) => {
+        this.deletingPublicId.set(null);
+
+        if (response.status !== 'ok') {
+          this.snackBar.open('No se ha podido eliminar la suscripción.', 'Cerrar', {
+            duration: 4000,
+          });
+          return;
+        }
+
+        this.snackBar.open('Suscripción eliminada correctamente.', 'Cerrar', {
+          duration: 4000,
+        });
+
+        this.load();
+      },
+      error: (error: unknown) => {
+        this.deletingPublicId.set(null);
+
+        if (error instanceof HttpErrorResponse && error.status === 409) {
+          this.snackBar.open(
+            'No se puede eliminar una suscripción que tenga instalaciones.',
+            'Cerrar',
+            {
+              duration: 5000,
+            },
+          );
+          this.load();
+          return;
+        }
+
+        if (error instanceof HttpErrorResponse && error.status === 404) {
+          this.snackBar.open('La suscripción ya no existe.', 'Cerrar', {
+            duration: 4000,
+          });
+          this.load();
+          return;
+        }
+
+        this.snackBar.open('No se ha podido eliminar la suscripción.', 'Cerrar', {
+          duration: 4000,
+        });
+      },
     });
   }
 

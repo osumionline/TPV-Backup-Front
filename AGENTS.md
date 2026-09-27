@@ -77,3 +77,4 @@ You are an expert in TypeScript, Angular, and scalable web application developme
 - Keep route-level components under `src/app/pages`.
 - Every TypeScript method, regardless of visibility, must have a JSDoc comment.
 - Every method signature declared in a TypeScript interface must have a JSDoc comment.
+- Use `MatTooltip` whenever a UI tooltip is required. Do not use the native `title` attribute as a tooltip substitute.
