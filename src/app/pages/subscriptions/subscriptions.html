@@ -120,17 +120,42 @@
 
         <ng-container matColumnDef="actions">
           <th mat-header-cell
-              *matHeaderCellDef>Acciones</th>
+              *matHeaderCellDef>
+            Acciones
+          </th>
+
           <td mat-cell
               *matCellDef="let subscription"
               class="actions-cell">
+            @if (changingActivePublicId() === subscription.publicId) {
+            <mat-spinner diameter="22" />
+            } @else {
             <button mat-icon-button
                     type="button"
                     aria-label="Editar suscripción"
-                    title="Editar suscripción"
+                    matTooltip="Editar suscripción"
                     (click)="openEditDialog(subscription)">
               <mat-icon fontSet="material-symbols-outlined">edit</mat-icon>
             </button>
+
+            @if (subscription.active) {
+            <button mat-icon-button
+                    type="button"
+                    aria-label="Desactivar suscripción"
+                    matTooltip="Desactivar suscripción"
+                    (click)="confirmDeactivate(subscription)">
+              <mat-icon fontSet="material-symbols-outlined">block</mat-icon>
+            </button>
+            } @else {
+            <button mat-icon-button
+                    type="button"
+                    aria-label="Activar suscripción"
+                    matTooltip="Activar suscripción"
+                    (click)="activate(subscription)">
+              <mat-icon fontSet="material-symbols-outlined">check_circle</mat-icon>
+            </button>
+            }
+            }
           </td>
         </ng-container>
 

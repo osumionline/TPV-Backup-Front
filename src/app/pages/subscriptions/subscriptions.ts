@@ -17,8 +17,13 @@ import {
   MatRowDef,
   MatTable,
 } from '@angular/material/table';
+import { MatTooltip } from '@angular/material/tooltip';
+import ConfirmDialog from '@components/confirm-dialog/confirm-dialog';
 import SubscriptionDialog from '@components/subscription-dialog/subscription-dialog';
+import ConfirmDialogDataInterface from '@model/confirm-dialog-data.interface';
 import GetSubscriptionsResponseInterface from '@model/get-subscriptions-response.interface';
+import SetSubscriptionActiveRequestInterface from '@model/set-subscription-active-request.interface';
+import SetSubscriptionActiveResponseInterface from '@model/set-subscription-active-response.interface';
 import SubscriptionDialogDataInterface from '@model/subscription-dialog-data.interface';
 import SubscriptionInterface from '@model/subscription.interface';
 import SubscriptionService from '@services/subscription.service';
@@ -41,6 +46,7 @@ import SubscriptionService from '@services/subscription.service';
     MatRow,
     MatRowDef,
     MatTable,
+    MatTooltip,
   ],
   templateUrl: './subscriptions.html',
   styleUrl: './subscriptions.scss',
@@ -53,6 +59,7 @@ export default class Subscriptions implements OnInit {
   readonly subscriptions: WritableSignal<SubscriptionInterface[]> = signal([]);
   readonly loading: WritableSignal<boolean> = signal(true);
   readonly error: WritableSignal<string | null> = signal(null);
+  readonly changingActivePublicId: WritableSignal<string | null> = signal(null);
 
   readonly displayedColumns: string[] = [
     'name',
@@ -118,6 +125,102 @@ export default class Subscriptions implements OnInit {
    */
   openEditDialog(subscription: SubscriptionInterface): void {
     this.openSubscriptionDialog(subscription);
+  }
+
+  /**
+   * Enables a disabled subscription.
+   *
+   * @param subscription Subscription to enable.
+   *
+   * @returns void
+   */
+  activate(subscription: SubscriptionInterface): void {
+    this.changeActiveState(subscription, true);
+  }
+
+  /**
+   * Opens a confirmation dialog before disabling a subscription.
+   *
+   * @param subscription Subscription to disable.
+   *
+   * @returns void
+   */
+  confirmDeactivate(subscription: SubscriptionInterface): void {
+    const data: ConfirmDialogDataInterface = {
+      title: 'Desactivar suscripción',
+      message:
+        `¿Quieres desactivar la suscripción "${subscription.name}"? ` +
+        'Sus instalaciones dejarán de poder enviar nuevas copias mientras permanezca desactivada.',
+      confirmLabel: 'Desactivar',
+      cancelLabel: 'Cancelar',
+    };
+
+    const dialogRef: MatDialogRef<ConfirmDialog, boolean> = this.dialog.open<
+      ConfirmDialog,
+      ConfirmDialogDataInterface,
+      boolean
+    >(ConfirmDialog, {
+      width: '480px',
+      maxWidth: 'calc(100vw - 32px)',
+      data,
+    });
+
+    dialogRef.afterClosed().subscribe((confirmed: boolean | undefined) => {
+      if (confirmed === true) {
+        this.changeActiveState(subscription, false);
+      }
+    });
+  }
+
+  /**
+   * Changes the administrative active state of a subscription.
+   *
+   * @param subscription Subscription to update.
+   * @param active Desired active state.
+   *
+   * @returns void
+   */
+  private changeActiveState(subscription: SubscriptionInterface, active: boolean): void {
+    if (this.changingActivePublicId() !== null) {
+      return;
+    }
+
+    const request: SetSubscriptionActiveRequestInterface = {
+      publicId: subscription.publicId,
+      active,
+    };
+
+    this.changingActivePublicId.set(subscription.publicId);
+
+    this.subscriptionService.setActive(request).subscribe({
+      next: (response: SetSubscriptionActiveResponseInterface) => {
+        this.changingActivePublicId.set(null);
+
+        if (response.status !== 'ok') {
+          this.snackBar.open('No se ha podido cambiar el estado de la suscripción.', 'Cerrar', {
+            duration: 4000,
+          });
+          return;
+        }
+
+        this.snackBar.open(
+          active ? 'Suscripción activada correctamente.' : 'Suscripción desactivada correctamente.',
+          'Cerrar',
+          {
+            duration: 4000,
+          },
+        );
+
+        this.load();
+      },
+      error: () => {
+        this.changingActivePublicId.set(null);
+
+        this.snackBar.open('No se ha podido cambiar el estado de la suscripción.', 'Cerrar', {
+          duration: 4000,
+        });
+      },
+    });
   }
 
   /**

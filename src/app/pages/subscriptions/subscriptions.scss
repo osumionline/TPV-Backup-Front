@@ -98,8 +98,14 @@ td strong,
 }
 
 .actions-cell {
-  width: 64px;
+  width: 112px;
   text-align: right;
+  white-space: nowrap;
+}
+
+.actions-cell mat-spinner {
+  display: inline-block;
+  vertical-align: middle;
 }
 
 @media (max-width: 767px) {

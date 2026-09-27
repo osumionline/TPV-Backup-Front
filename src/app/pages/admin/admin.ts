@@ -6,6 +6,7 @@ import { MatIcon } from '@angular/material/icon';
 import { MatListItem, MatListItemIcon, MatListItemTitle, MatNavList } from '@angular/material/list';
 import { MatSidenav, MatSidenavContainer, MatSidenavContent } from '@angular/material/sidenav';
 import { MatToolbar } from '@angular/material/toolbar';
+import { MatTooltip } from '@angular/material/tooltip';
 import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import AuthService from '@services/auth.service';
 import { map } from 'rxjs';
@@ -26,6 +27,7 @@ import { map } from 'rxjs';
     RouterLink,
     RouterLinkActive,
     RouterOutlet,
+    MatTooltip,
   ],
   templateUrl: './admin.html',
   styleUrl: './admin.scss',

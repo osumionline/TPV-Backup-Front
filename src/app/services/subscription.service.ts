@@ -4,6 +4,8 @@ import API_BASE_URL from '@constants/api.config';
 import CreateSubscriptionRequestInterface from '@model/create-subscription-request.interface';
 import CreateSubscriptionResponseInterface from '@model/create-subscription-response.interface';
 import GetSubscriptionsResponseInterface from '@model/get-subscriptions-response.interface';
+import SetSubscriptionActiveRequestInterface from '@model/set-subscription-active-request.interface';
+import SetSubscriptionActiveResponseInterface from '@model/set-subscription-active-response.interface';
 import UpdateSubscriptionRequestInterface from '@model/update-subscription-request.interface';
 import UpdateSubscriptionResponseInterface from '@model/update-subscription-response.interface';
 import { Observable } from 'rxjs';
@@ -49,6 +51,22 @@ export default class SubscriptionService {
   ): Observable<UpdateSubscriptionResponseInterface> {
     return this.http.post<UpdateSubscriptionResponseInterface>(
       `${API_BASE_URL}/admin/subscriptions/update`,
+      data,
+    );
+  }
+
+  /**
+   * Changes the administrative active state of a subscription.
+   *
+   * @param data Subscription identifier and desired active state.
+   *
+   * @returns Observable with the state change response.
+   */
+  setActive(
+    data: SetSubscriptionActiveRequestInterface,
+  ): Observable<SetSubscriptionActiveResponseInterface> {
+    return this.http.post<SetSubscriptionActiveResponseInterface>(
+      `${API_BASE_URL}/admin/subscriptions/set-active`,
       data,
     );
   }
