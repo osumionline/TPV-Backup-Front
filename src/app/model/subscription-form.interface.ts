@@ -1,4 +1,4 @@
-export default interface CreateSubscriptionFormInterface {
+export default interface SubscriptionFormInterface {
   name: string;
   contactEmail: string;
   expiresAt: Date | null;

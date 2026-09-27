@@ -1,0 +1,128 @@
+<h2 mat-dialog-title>{{ dialogTitle }}</h2>
+
+<form [formRoot]="subscriptionForm">
+    <mat-dialog-content>
+        <div class="form-grid">
+            <mat-form-field class="form-field--full"
+                            appearance="outline">
+                <mat-label>Nombre</mat-label>
+
+                <input matInput
+                       autocomplete="organization"
+                       [formField]="subscriptionForm.name" />
+
+                @if (subscriptionForm.name().touched() && subscriptionForm.name().invalid()) {
+                <mat-error>
+                    {{ subscriptionForm.name().errors()[0].message }}
+                </mat-error>
+                }
+            </mat-form-field>
+
+            <mat-form-field class="form-field--full"
+                            appearance="outline">
+                <mat-label>Email de contacto</mat-label>
+
+                <input matInput
+                       type="email"
+                       autocomplete="email"
+                       [formField]="subscriptionForm.contactEmail" />
+
+                @if (
+                subscriptionForm.contactEmail().touched() &&
+                subscriptionForm.contactEmail().invalid()
+                ) {
+                <mat-error>
+                    {{ subscriptionForm.contactEmail().errors()[0].message }}
+                </mat-error>
+                }
+            </mat-form-field>
+
+            <mat-form-field class="form-field--full"
+                            appearance="outline">
+                <mat-label>Fecha de caducidad</mat-label>
+
+                <input matInput
+                       [matDatepicker]="expiresAtPicker"
+                       [formField]="subscriptionForm.expiresAt" />
+
+                <mat-datepicker-toggle matIconSuffix
+                                       [for]="expiresAtPicker" />
+
+                <mat-datepicker #expiresAtPicker />
+
+                <mat-hint>Déjalo vacío para una suscripción sin caducidad.</mat-hint>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label>Máximo de instalaciones</mat-label>
+
+                <input matInput
+                       type="number"
+                       inputmode="numeric"
+                       [formField]="subscriptionForm.maxInstallations" />
+
+                @if (
+                subscriptionForm.maxInstallations().touched() &&
+                subscriptionForm.maxInstallations().invalid()
+                ) {
+                <mat-error>
+                    {{ subscriptionForm.maxInstallations().errors()[0].message }}
+                </mat-error>
+                }
+
+                @if (editing && minimumInstallations > 1) {
+                <mat-hint>
+                    Hay {{ minimumInstallations }} instalaciones registradas.
+                </mat-hint>
+                }
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label>Copias por instalación</mat-label>
+
+                <input matInput
+                       type="number"
+                       inputmode="numeric"
+                       [formField]="subscriptionForm.maxBackupsPerInstallation" />
+
+                @if (
+                subscriptionForm.maxBackupsPerInstallation().touched() &&
+                subscriptionForm.maxBackupsPerInstallation().invalid()
+                ) {
+                <mat-error>
+                    {{ subscriptionForm.maxBackupsPerInstallation().errors()[0].message }}
+                </mat-error>
+                }
+            </mat-form-field>
+        </div>
+
+        @for (error of subscriptionForm().errors(); track error.kind) {
+        <p class="server-error"
+           role="alert">
+            {{ error.message }}
+        </p>
+        }
+    </mat-dialog-content>
+
+    <mat-dialog-actions align="end">
+        <button mat-button
+                type="button"
+                [disabled]="subscriptionForm().submitting()"
+                (click)="cancel()">
+            Cancelar
+        </button>
+
+        <button mat-flat-button
+                type="submit"
+                [disabled]="subscriptionForm().submitting()">
+            @if (subscriptionForm().submitting()) {
+            <span class="submit-content">
+                <mat-spinner diameter="20" />
+                <span>{{ submittingLabel }}</span>
+            </span>
+            } @else {
+            <span>{{ submitLabel }}</span>
+            }
+        </button>
+    </mat-dialog-actions>
+</form>

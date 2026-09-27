@@ -42,14 +42,14 @@
   margin: 0;
 }
 
-.state > mat-icon {
+.state>mat-icon {
   width: 40px;
   height: 40px;
   color: var(--mat-sys-primary);
   font-size: 40px;
 }
 
-.state--error > mat-icon {
+.state--error>mat-icon {
   color: var(--mat-sys-error);
 }
 
@@ -97,13 +97,18 @@ td strong,
   color: var(--mat-sys-on-surface-variant);
 }
 
+.actions-cell {
+  width: 64px;
+  text-align: right;
+}
+
 @media (max-width: 767px) {
   .page-header {
     align-items: stretch;
     flex-direction: column;
   }
 
-  .page-header > button {
+  .page-header>button {
     align-self: flex-start;
   }
 

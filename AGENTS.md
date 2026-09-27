@@ -75,3 +75,5 @@ You are an expert in TypeScript, Angular, and scalable web application developme
 - Use `input()`, `output()` and `model()` instead of decorator-based component inputs and outputs.
 - Keep reusable UI components under `src/app/components`.
 - Keep route-level components under `src/app/pages`.
+- Every TypeScript method, regardless of visibility, must have a JSDoc comment.
+- Every method signature declared in a TypeScript interface must have a JSDoc comment.
