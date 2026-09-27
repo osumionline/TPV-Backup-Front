@@ -1,12 +1,24 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, computed, inject, Signal, signal, WritableSignal } from '@angular/core';
 import { email, FieldTree, form, FormField, FormRoot, required } from '@angular/forms/signals';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatButton, MatIconButton } from '@angular/material/button';
+import {
+  MatCard,
+  MatCardContent,
+  MatCardHeader,
+  MatCardSubtitle,
+  MatCardTitle,
+} from '@angular/material/card';
+import {
+  MatError,
+  MatFormField,
+  MatLabel,
+  MatPrefix,
+  MatSuffix,
+} from '@angular/material/form-field';
+import { MatIcon } from '@angular/material/icon';
+import { MatInput } from '@angular/material/input';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { ActivatedRoute, Router } from '@angular/router';
 import LoginFormInterface from '@model/login-form.interface';
 import AuthService from '@services/auth.service';
@@ -17,12 +29,21 @@ import { firstValueFrom } from 'rxjs';
   imports: [
     FormField,
     FormRoot,
-    MatButtonModule,
-    MatCardModule,
-    MatFormFieldModule,
-    MatIconModule,
-    MatInputModule,
-    MatProgressSpinnerModule,
+    MatButton,
+    MatCard,
+    MatCardContent,
+    MatCardHeader,
+    MatCardSubtitle,
+    MatCardTitle,
+    MatError,
+    MatFormField,
+    MatIcon,
+    MatIconButton,
+    MatInput,
+    MatLabel,
+    MatPrefix,
+    MatProgressSpinner,
+    MatSuffix,
   ],
   templateUrl: './login.html',
   styleUrl: './login.scss',

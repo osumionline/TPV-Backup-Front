@@ -1,11 +1,22 @@
 import { Component, inject, OnInit, signal, WritableSignal } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { MatIconModule } from '@angular/material/icon';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { MatTableModule } from '@angular/material/table';
+import { MatButton } from '@angular/material/button';
+import { MatCard } from '@angular/material/card';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatIcon } from '@angular/material/icon';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import {
+  MatCell,
+  MatCellDef,
+  MatColumnDef,
+  MatHeaderCell,
+  MatHeaderCellDef,
+  MatHeaderRow,
+  MatHeaderRowDef,
+  MatRow,
+  MatRowDef,
+  MatTable,
+} from '@angular/material/table';
 import CreateSubscriptionDialog from '@components/create-subscription-dialog/create-subscription-dialog';
 import GetSubscriptionsResponseInterface from '@model/get-subscriptions-response.interface';
 import SubscriptionInterface from '@model/subscription.interface';
@@ -14,13 +25,20 @@ import SubscriptionService from '@services/subscription.service';
 @Component({
   selector: 'app-subscriptions',
   imports: [
-    MatButtonModule,
-    MatCardModule,
-    MatDialogModule,
-    MatIconModule,
-    MatProgressSpinnerModule,
-    MatSnackBarModule,
-    MatTableModule,
+    MatButton,
+    MatCard,
+    MatCell,
+    MatCellDef,
+    MatColumnDef,
+    MatHeaderCell,
+    MatHeaderCellDef,
+    MatHeaderRow,
+    MatHeaderRowDef,
+    MatIcon,
+    MatProgressSpinner,
+    MatRow,
+    MatRowDef,
+    MatTable,
   ],
   templateUrl: './subscriptions.html',
   styleUrl: './subscriptions.scss',
@@ -70,11 +88,14 @@ export default class Subscriptions implements OnInit {
   }
 
   openCreateDialog(): void {
-    const dialogRef = this.dialog.open(CreateSubscriptionDialog, {
-      width: '640px',
-      maxWidth: 'calc(100vw - 32px)',
-      disableClose: true,
-    });
+    const dialogRef: MatDialogRef<CreateSubscriptionDialog, boolean> = this.dialog.open(
+      CreateSubscriptionDialog,
+      {
+        width: '640px',
+        maxWidth: 'calc(100vw - 32px)',
+        disableClose: true,
+      },
+    );
 
     dialogRef.afterClosed().subscribe((created: boolean | undefined) => {
       if (created !== true) {

@@ -9,7 +9,6 @@ import DatepickerIntlService from '@services/datepicker-intl.service';
 
 const appConfig: ApplicationConfig = {
   providers: [
-    provideNativeDateAdapter(),
     {
       provide: MAT_DATE_LOCALE,
       useValue: 'es-ES',
