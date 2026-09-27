@@ -57,3 +57,21 @@ You are an expert in TypeScript, Angular, and scalable web application developme
 - Use the `providedIn: 'root'` option for singleton services
 - Prefer the `@Service` decorator over `@Injectable({providedIn: 'root'})` for new singleton services (Angular v22+)
 - Use the `inject()` function instead of constructor injection
+
+## Project Conventions
+
+- Use the path aliases defined in `tsconfig.json` for all application imports.
+- Always use the complete aliased path. Do not use relative imports between application TypeScript files.
+- If a file exposes exactly one class, interface, function, constant, guard, interceptor, or other symbol, use `export default`.
+- If a file exposes multiple symbols, use named exports and never use `export default`.
+- Use Angular Material whenever an appropriate Material component exists instead of recreating equivalent UI behavior manually.
+- Import Angular Material standalone components and directives directly. Do not import `Mat*Module` NgModules.
+- Use Signal Forms for all new forms.
+- Do not use Reactive Forms or Template-driven Forms unless there is a specific technical reason that Signal Forms cannot solve.
+- Use `FormRoot` for Signal Form submission when applicable.
+- Use signals for component state.
+- Use `computed()` for derived state and `effect()` only for actual reactive side effects.
+- Explicitly type values whenever the type is not already obvious from inference.
+- Use `input()`, `output()` and `model()` instead of decorator-based component inputs and outputs.
+- Keep reusable UI components under `src/app/components`.
+- Keep route-level components under `src/app/pages`.

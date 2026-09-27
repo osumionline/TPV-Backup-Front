@@ -55,7 +55,7 @@ export default class CreateSubscriptionDialog {
     contactEmail: '',
     expiresAt: null,
     maxInstallations: 1,
-    maxBackupsPerInstallation: 5,
+    maxBackupsPerInstallation: 6,
   });
 
   readonly subscriptionForm: FieldTree<CreateSubscriptionFormInterface> = form(
