@@ -1,0 +1,142 @@
+<h2 mat-dialog-title>Nueva suscripción</h2>
+
+<form (submit)="onSubmit($event)">
+  <mat-dialog-content>
+    <div class="form-grid">
+      <div class="form-field form-field--full">
+        <mat-form-field appearance="outline">
+          <mat-label>Nombre</mat-label>
+          <input
+            matInput
+            autocomplete="organization"
+            [formField]="subscriptionForm.name"
+            [attr.aria-invalid]="subscriptionForm.name().invalid()"
+          />
+        </mat-form-field>
+
+        @if (
+          subscriptionForm.name().touched() &&
+          subscriptionForm.name().invalid()
+        ) {
+          <p class="field-error">
+            {{ subscriptionForm.name().errors()[0].message }}
+          </p>
+        }
+      </div>
+
+      <div class="form-field form-field--full">
+        <mat-form-field appearance="outline">
+          <mat-label>Email de contacto</mat-label>
+          <input
+            matInput
+            type="email"
+            autocomplete="email"
+            [formField]="subscriptionForm.contactEmail"
+            [attr.aria-invalid]="subscriptionForm.contactEmail().invalid()"
+          />
+        </mat-form-field>
+
+        @if (
+          subscriptionForm.contactEmail().touched() &&
+          subscriptionForm.contactEmail().invalid()
+        ) {
+          <p class="field-error">
+            {{ subscriptionForm.contactEmail().errors()[0].message }}
+          </p>
+        }
+      </div>
+
+      <div class="form-field form-field--full">
+        <mat-form-field appearance="outline">
+          <mat-label>Fecha de caducidad</mat-label>
+          <input
+            matInput
+            type="date"
+            [formField]="subscriptionForm.expiresAt"
+          />
+          <mat-hint>Déjalo vacío para una suscripción sin caducidad.</mat-hint>
+        </mat-form-field>
+      </div>
+
+      <div class="form-field">
+        <mat-form-field appearance="outline">
+          <mat-label>Máximo de instalaciones</mat-label>
+          <input
+            matInput
+            type="number"
+            inputmode="numeric"
+            [formField]="subscriptionForm.maxInstallations"
+            [attr.aria-invalid]="subscriptionForm.maxInstallations().invalid()"
+          />
+        </mat-form-field>
+
+        @if (
+          subscriptionForm.maxInstallations().touched() &&
+          subscriptionForm.maxInstallations().invalid()
+        ) {
+          <p class="field-error">
+            {{ subscriptionForm.maxInstallations().errors()[0].message }}
+          </p>
+        }
+      </div>
+
+      <div class="form-field">
+        <mat-form-field appearance="outline">
+          <mat-label>Copias por instalación</mat-label>
+          <input
+            matInput
+            type="number"
+            inputmode="numeric"
+            [formField]="subscriptionForm.maxBackupsPerInstallation"
+            [attr.aria-invalid]="
+              subscriptionForm.maxBackupsPerInstallation().invalid()
+            "
+          />
+        </mat-form-field>
+
+        @if (
+          subscriptionForm.maxBackupsPerInstallation().touched() &&
+          subscriptionForm.maxBackupsPerInstallation().invalid()
+        ) {
+          <p class="field-error">
+            {{
+              subscriptionForm.maxBackupsPerInstallation().errors()[0].message
+            }}
+          </p>
+        }
+      </div>
+    </div>
+
+    @if (serverError(); as errorMessage) {
+      <p
+        class="server-error"
+        role="alert"
+      >
+        {{ errorMessage }}
+      </p>
+    }
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button
+      mat-button
+      type="button"
+      [disabled]="subscriptionForm().submitting()"
+      (click)="cancel()"
+    >
+      Cancelar
+    </button>
+
+    <button
+      mat-flat-button
+      type="submit"
+      [disabled]="subscriptionForm().submitting()"
+    >
+      @if (subscriptionForm().submitting()) {
+        Guardando...
+      } @else {
+        Crear suscripción
+      }
+    </button>
+  </mat-dialog-actions>
+</form>

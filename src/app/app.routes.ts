@@ -7,19 +7,30 @@ const routes: Routes = [
     loadComponent: () => import('@pages/login/login').then((component) => component.default),
   },
   {
-    path: 'dashboard',
-    canActivate: [authGuard],
-    loadComponent: () =>
-      import('@pages/dashboard/dashboard').then((component) => component.default),
-  },
-  {
     path: '',
-    pathMatch: 'full',
-    redirectTo: 'dashboard',
+    canActivate: [authGuard],
+    loadComponent: () => import('@pages/admin/admin').then((component) => component.default),
+    children: [
+      {
+        path: 'subscriptions',
+        loadComponent: () =>
+          import('@pages/subscriptions/subscriptions').then((component) => component.default),
+      },
+      {
+        path: 'dashboard',
+        pathMatch: 'full',
+        redirectTo: 'subscriptions',
+      },
+      {
+        path: '',
+        pathMatch: 'full',
+        redirectTo: 'subscriptions',
+      },
+    ],
   },
   {
     path: '**',
-    redirectTo: 'dashboard',
+    redirectTo: 'subscriptions',
   },
 ];
 

@@ -13,6 +13,7 @@
     "module": "preserve",
     "paths": {
       "@app/*": ["./src/app/*"],
+      "@components/*": ["./src/app/components/*"],
       "@constants/*": ["./src/app/constants/*"],
       "@guards/*": ["./src/app/guards/*"],
       "@interceptors/*": ["./src/app/interceptors/*"],

@@ -72,7 +72,7 @@ export default class Login {
       returnUrl.startsWith('//') ||
       returnUrl === '/login'
     ) {
-      return '/dashboard';
+      return '/subscriptions';
     }
 
     return returnUrl;
