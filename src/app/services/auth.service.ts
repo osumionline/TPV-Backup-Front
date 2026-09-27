@@ -21,6 +21,14 @@ export default class AuthService {
     return token !== null && token.trim() !== '';
   });
 
+  /**
+   * Authenticates an administrator and stores the resulting session.
+   *
+   * @param email Administrator email.
+   * @param password Administrator password.
+   *
+   * @returns Observable with the login response.
+   */
   login(email: string, password: string): Observable<LoginResponseInterface> {
     return this.http
       .post<LoginResponseInterface>(`${API_BASE_URL}/admin/login`, {
@@ -43,6 +51,11 @@ export default class AuthService {
       );
   }
 
+  /**
+   * Gets the currently authenticated administrator.
+   *
+   * @returns Observable with the authenticated administrator response.
+   */
   me(): Observable<MeResponseInterface> {
     return this.http.get<MeResponseInterface>(`${API_BASE_URL}/admin/me`).pipe(
       tap((response: MeResponseInterface) => {
@@ -51,6 +64,11 @@ export default class AuthService {
     );
   }
 
+  /**
+   * Clears the current administrator session.
+   *
+   * @returns void
+   */
   clearSession(): void {
     this.tokenStorage.clear();
     this.userState.set(null);

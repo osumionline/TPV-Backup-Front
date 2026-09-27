@@ -115,10 +115,20 @@ export default class Login {
     },
   );
 
+  /**
+   * Toggles the visibility of the password field.
+   *
+   * @returns void
+   */
   togglePasswordVisibility(): void {
     this.hidePassword.update((hidden: boolean) => !hidden);
   }
 
+  /**
+   * Gets a safe URL to navigate to after a successful login.
+   *
+   * @returns Valid internal return URL.
+   */
   private getReturnUrl(): string {
     const returnUrl: string | null = this.route.snapshot.queryParamMap.get('returnUrl');
 

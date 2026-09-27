@@ -23,6 +23,14 @@ export default class DatepickerIntlService extends MatDatepickerIntl {
   override endDateLabel: string = 'Fecha final';
   override comparisonDateLabel: string = 'Rango de comparación';
 
+  /**
+   * Formats the year range label displayed by the multi-year datepicker view.
+   *
+   * @param start Start year.
+   * @param end End year.
+   *
+   * @returns Formatted year range label.
+   */
   override formatYearRangeLabel(start: string, end: string): string {
     return `${start} a ${end}`;
   }

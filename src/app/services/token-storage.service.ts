@@ -7,6 +7,13 @@ export default class TokenStorageService {
 
   readonly token: Signal<string | null> = this.tokenState.asReadonly();
 
+  /**
+   * Stores the administration token in session storage.
+   *
+   * @param token Token to store.
+   *
+   * @returns void
+   */
   setToken(token: string): void {
     const cleanToken: string = token.trim();
 
@@ -19,6 +26,11 @@ export default class TokenStorageService {
     this.tokenState.set(cleanToken);
   }
 
+  /**
+   * Removes the administration token from session storage.
+   *
+   * @returns void
+   */
   clear(): void {
     sessionStorage.removeItem(this.storageKey);
     this.tokenState.set(null);

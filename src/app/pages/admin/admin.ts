@@ -44,10 +44,20 @@ export default class Admin {
     { initialValue: false },
   );
 
+  /**
+   * Toggles the mobile navigation menu.
+   *
+   * @returns void
+   */
   toggleMobileMenu(): void {
     this.mobileMenuOpen.update((open: boolean) => !open);
   }
 
+  /**
+   * Closes the mobile navigation menu when the application is displayed on a handset.
+   *
+   * @returns void
+   */
   closeMobileMenu(): void {
     if (this.isHandset()) {
       this.mobileMenuOpen.set(false);
