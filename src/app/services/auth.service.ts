@@ -1,9 +1,9 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { computed, inject, Service, Signal, signal } from '@angular/core';
 import API_BASE_URL from '@constants/api.config';
-import AdminUserInterface from '@model/admin-user.interface';
-import LoginResponseInterface from '@model/login-response.interface';
-import MeResponseInterface from '@model/me-response.interface';
+import AdminUserInterface from '@model/auth/admin-user.interface';
+import LoginResponseInterface from '@model/auth/login-response.interface';
+import MeResponseInterface from '@model/auth/me-response.interface';
 import TokenStorageService from '@services/token-storage.service';
 import { Observable, tap } from 'rxjs';
 

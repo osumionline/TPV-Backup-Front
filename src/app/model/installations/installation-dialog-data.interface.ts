@@ -1,4 +1,4 @@
-import InstallationInterface from '@model/installation.interface';
+import InstallationInterface from '@model/installations/installation.interface';
 
 export default interface InstallationDialogDataInterface {
   installation: InstallationInterface | null;

@@ -20,7 +20,7 @@ import { MatIcon } from '@angular/material/icon';
 import { MatInput } from '@angular/material/input';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { ActivatedRoute, Router } from '@angular/router';
-import LoginFormInterface from '@model/login-form.interface';
+import LoginFormInterface from '@model/auth/login-form.interface';
 import AuthService from '@services/auth.service';
 import { firstValueFrom } from 'rxjs';
 

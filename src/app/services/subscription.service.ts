@@ -1,15 +1,15 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Service } from '@angular/core';
 import API_BASE_URL from '@constants/api.config';
-import CreateSubscriptionRequestInterface from '@model/create-subscription-request.interface';
-import CreateSubscriptionResponseInterface from '@model/create-subscription-response.interface';
-import DeleteSubscriptionRequestInterface from '@model/delete-subscription-request.interface';
-import DeleteSubscriptionResponseInterface from '@model/delete-subscription-response.interface';
-import GetSubscriptionsResponseInterface from '@model/get-subscriptions-response.interface';
-import SetSubscriptionActiveRequestInterface from '@model/set-subscription-active-request.interface';
-import SetSubscriptionActiveResponseInterface from '@model/set-subscription-active-response.interface';
-import UpdateSubscriptionRequestInterface from '@model/update-subscription-request.interface';
-import UpdateSubscriptionResponseInterface from '@model/update-subscription-response.interface';
+import CreateSubscriptionRequestInterface from '@model/subscriptions/create-subscription-request.interface';
+import CreateSubscriptionResponseInterface from '@model/subscriptions/create-subscription-response.interface';
+import DeleteSubscriptionRequestInterface from '@model/subscriptions/delete-subscription-request.interface';
+import DeleteSubscriptionResponseInterface from '@model/subscriptions/delete-subscription-response.interface';
+import GetSubscriptionsResponseInterface from '@model/subscriptions/get-subscriptions-response.interface';
+import SetSubscriptionActiveRequestInterface from '@model/subscriptions/set-subscription-active-request.interface';
+import SetSubscriptionActiveResponseInterface from '@model/subscriptions/set-subscription-active-response.interface';
+import UpdateSubscriptionRequestInterface from '@model/subscriptions/update-subscription-request.interface';
+import UpdateSubscriptionResponseInterface from '@model/subscriptions/update-subscription-response.interface';
 import { Observable } from 'rxjs';
 
 @Service()

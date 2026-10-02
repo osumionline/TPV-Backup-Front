@@ -7,7 +7,7 @@ import {
   MatDialogContent,
   MatDialogTitle,
 } from '@angular/material/dialog';
-import ConfirmDialogDataInterface from '@model/confirm-dialog-data.interface';
+import ConfirmDialogDataInterface from '@model/common/confirm-dialog-data.interface';
 
 @Component({
   selector: 'app-confirm-dialog',

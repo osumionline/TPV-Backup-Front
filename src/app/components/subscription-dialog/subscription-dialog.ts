@@ -17,13 +17,13 @@ import {
 import { MatError, MatFormField, MatHint, MatLabel, MatSuffix } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
-import CreateSubscriptionRequestInterface from '@model/create-subscription-request.interface';
-import CreateSubscriptionResponseInterface from '@model/create-subscription-response.interface';
-import SubscriptionDialogDataInterface from '@model/subscription-dialog-data.interface';
-import SubscriptionFormInterface from '@model/subscription-form.interface';
-import SubscriptionInterface from '@model/subscription.interface';
-import UpdateSubscriptionRequestInterface from '@model/update-subscription-request.interface';
-import UpdateSubscriptionResponseInterface from '@model/update-subscription-response.interface';
+import CreateSubscriptionRequestInterface from '@model/subscriptions/create-subscription-request.interface';
+import CreateSubscriptionResponseInterface from '@model/subscriptions/create-subscription-response.interface';
+import SubscriptionDialogDataInterface from '@model/subscriptions/subscription-dialog-data.interface';
+import SubscriptionFormInterface from '@model/subscriptions/subscription-form.interface';
+import SubscriptionInterface from '@model/subscriptions/subscription.interface';
+import UpdateSubscriptionRequestInterface from '@model/subscriptions/update-subscription-request.interface';
+import UpdateSubscriptionResponseInterface from '@model/subscriptions/update-subscription-response.interface';
 import SubscriptionService from '@services/subscription.service';
 import { firstValueFrom } from 'rxjs';
 

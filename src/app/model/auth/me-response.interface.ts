@@ -1,4 +1,4 @@
-import AdminUserInterface from '@model/admin-user.interface';
+import AdminUserInterface from '@model/auth/admin-user.interface';
 
 export default interface MeResponseInterface {
   status: string;

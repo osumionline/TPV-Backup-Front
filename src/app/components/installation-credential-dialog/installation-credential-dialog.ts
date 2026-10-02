@@ -11,7 +11,7 @@ import {
 import { MatIcon } from '@angular/material/icon';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTooltip } from '@angular/material/tooltip';
-import InstallationCredentialDialogDataInterface from '@model/installation-credential-dialog-data.interface';
+import InstallationCredentialDialogDataInterface from '@model/installations/credentials/installation-credential-dialog-data.interface';
 
 @Component({
   selector: 'app-installation-credential-dialog',

@@ -1,4 +1,4 @@
-import SubscriptionInterface from '@model/subscription.interface';
+import SubscriptionInterface from '@model/subscriptions/subscription.interface';
 
 export default interface GetSubscriptionsResponseInterface {
   status: string;

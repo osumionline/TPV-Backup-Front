@@ -22,14 +22,14 @@ import {
 import { MatTooltip } from '@angular/material/tooltip';
 import ConfirmDialog from '@components/confirm-dialog/confirm-dialog';
 import SubscriptionDialog from '@components/subscription-dialog/subscription-dialog';
-import ConfirmDialogDataInterface from '@model/confirm-dialog-data.interface';
-import DeleteSubscriptionRequestInterface from '@model/delete-subscription-request.interface';
-import DeleteSubscriptionResponseInterface from '@model/delete-subscription-response.interface';
-import GetSubscriptionsResponseInterface from '@model/get-subscriptions-response.interface';
-import SetSubscriptionActiveRequestInterface from '@model/set-subscription-active-request.interface';
-import SetSubscriptionActiveResponseInterface from '@model/set-subscription-active-response.interface';
-import SubscriptionDialogDataInterface from '@model/subscription-dialog-data.interface';
-import SubscriptionInterface from '@model/subscription.interface';
+import ConfirmDialogDataInterface from '@model/common/confirm-dialog-data.interface';
+import DeleteSubscriptionRequestInterface from '@model/subscriptions/delete-subscription-request.interface';
+import DeleteSubscriptionResponseInterface from '@model/subscriptions/delete-subscription-response.interface';
+import GetSubscriptionsResponseInterface from '@model/subscriptions/get-subscriptions-response.interface';
+import SetSubscriptionActiveRequestInterface from '@model/subscriptions/set-subscription-active-request.interface';
+import SetSubscriptionActiveResponseInterface from '@model/subscriptions/set-subscription-active-response.interface';
+import SubscriptionDialogDataInterface from '@model/subscriptions/subscription-dialog-data.interface';
+import SubscriptionInterface from '@model/subscriptions/subscription.interface';
 import SubscriptionService from '@services/subscription.service';
 
 @Component({

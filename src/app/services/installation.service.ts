@@ -1,18 +1,18 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Service } from '@angular/core';
 import API_BASE_URL from '@constants/api.config';
-import CreateInstallationRequestInterface from '@model/create-installation-request.interface';
-import CreateInstallationResponseInterface from '@model/create-installation-response.interface';
-import DeleteInstallationRequestInterface from '@model/delete-installation-request.interface';
-import DeleteInstallationResponseInterface from '@model/delete-installation-response.interface';
-import GetInstallationsResponseInterface from '@model/get-installations-response.interface';
-import InstallationCredentialRequestInterface from '@model/installation-credential-request.interface';
-import RevokeInstallationCredentialResponseInterface from '@model/revoke-installation-credential-response.interface';
-import RotateInstallationCredentialResponseInterface from '@model/rotate-installation-credential-response.interface';
-import SetInstallationActiveRequestInterface from '@model/set-installation-active-request.interface';
-import SetInstallationActiveResponseInterface from '@model/set-installation-active-response.interface';
-import UpdateInstallationRequestInterface from '@model/update-installation-request.interface';
-import UpdateInstallationResponseInterface from '@model/update-installation-response.interface';
+import CreateInstallationRequestInterface from '@model/installations/create-installation-request.interface';
+import CreateInstallationResponseInterface from '@model/installations/create-installation-response.interface';
+import InstallationCredentialRequestInterface from '@model/installations/credentials/installation-credential-request.interface';
+import RevokeInstallationCredentialResponseInterface from '@model/installations/credentials/revoke-installation-credential-response.interface';
+import RotateInstallationCredentialResponseInterface from '@model/installations/credentials/rotate-installation-credential-response.interface';
+import DeleteInstallationRequestInterface from '@model/installations/delete-installation-request.interface';
+import DeleteInstallationResponseInterface from '@model/installations/delete-installation-response.interface';
+import GetInstallationsResponseInterface from '@model/installations/get-installations-response.interface';
+import SetInstallationActiveRequestInterface from '@model/installations/set-installation-active-request.interface';
+import SetInstallationActiveResponseInterface from '@model/installations/set-installation-active-response.interface';
+import UpdateInstallationRequestInterface from '@model/installations/update-installation-request.interface';
+import UpdateInstallationResponseInterface from '@model/installations/update-installation-response.interface';
 import { Observable } from 'rxjs';
 
 @Service()
