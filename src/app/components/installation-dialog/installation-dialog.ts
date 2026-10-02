@@ -11,7 +11,7 @@ import {
   MatDialogRef,
   MatDialogTitle,
 } from '@angular/material/dialog';
-import { MatError, MatFormField, MatHint, MatLabel, MatSuffix } from '@angular/material/form-field';
+import { MatError, MatFormField, MatHint, MatLabel } from '@angular/material/form-field';
 import { MatIcon } from '@angular/material/icon';
 import { MatInput } from '@angular/material/input';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
@@ -50,7 +50,6 @@ import { firstValueFrom } from 'rxjs';
     MatOption,
     MatProgressSpinner,
     MatSelect,
-    MatSuffix,
     MatTooltip,
   ],
   templateUrl: './installation-dialog.html',
