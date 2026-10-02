@@ -1,0 +1,163 @@
+<h2 mat-dialog-title>{{ dialogTitle }}</h2>
+
+@if (createdCredential(); as credential) {
+<mat-dialog-content>
+    <div class="credential-result"
+         role="status">
+        <mat-icon class="credential-result__icon"
+                  fontSet="material-symbols-outlined">
+            key
+        </mat-icon>
+
+        <h3>Credencial creada</h3>
+
+        <p>
+            Guarda estos datos ahora. El secreto no podrá volver a consultarse una vez cierres esta ventana.
+        </p>
+
+        <div class="credential-field">
+            <span class="credential-field__label">Key ID</span>
+
+            <div class="credential-field__value">
+                <code>{{ credential.keyId }}</code>
+
+                <button mat-icon-button
+                        type="button"
+                        aria-label="Copiar Key ID"
+                        matTooltip="Copiar Key ID"
+                        (click)="copyCredential(credential.keyId, 'Key ID')">
+                    <mat-icon fontSet="material-symbols-outlined">content_copy</mat-icon>
+                </button>
+            </div>
+        </div>
+
+        <div class="credential-field">
+            <span class="credential-field__label">Secret</span>
+
+            <div class="credential-field__value">
+                <code>{{ credential.secret }}</code>
+
+                <button mat-icon-button
+                        type="button"
+                        aria-label="Copiar secret"
+                        matTooltip="Copiar secret"
+                        (click)="copyCredential(credential.secret, 'Secret')">
+                    <mat-icon fontSet="material-symbols-outlined">content_copy</mat-icon>
+                </button>
+            </div>
+        </div>
+    </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+    <button mat-flat-button
+            type="button"
+            (click)="finishCreation()">
+        Ya he guardado la credencial
+    </button>
+</mat-dialog-actions>
+} @else {
+<form [formRoot]="installationForm">
+    <mat-dialog-content>
+        <div class="form-grid">
+            @if (!editing) {
+            @if (subscriptionsLoading()) {
+            <div class="subscriptions-state">
+                <mat-spinner diameter="24" />
+                <span>Cargando suscripciones...</span>
+            </div>
+            } @else if (subscriptionsError(); as errorMessage) {
+            <div class="subscriptions-error"
+                 role="alert">
+                <span>{{ errorMessage }}</span>
+
+                <button mat-stroked-button
+                        type="button"
+                        (click)="loadSubscriptions()">
+                    Reintentar
+                </button>
+            </div>
+            } @else {
+            <mat-form-field appearance="outline">
+                <mat-label>Suscripción</mat-label>
+
+                <mat-select [formField]="installationForm.subscriptionPublicId">
+                    @for (subscription of subscriptions(); track subscription.publicId) {
+                    <mat-option [value]="subscription.publicId"
+                                [disabled]="subscription.installationCount >= subscription.maxInstallations">
+                        {{ subscription.name }}
+                        ({{ subscription.installationCount }} / {{ subscription.maxInstallations }})
+                    </mat-option>
+                    }
+                </mat-select>
+
+                @if (
+                installationForm.subscriptionPublicId().touched() &&
+                installationForm.subscriptionPublicId().invalid()
+                ) {
+                <mat-error>
+                    {{ installationForm.subscriptionPublicId().errors()[0].message }}
+                </mat-error>
+                }
+
+                <mat-hint>
+                    Las suscripciones que hayan alcanzado su límite no pueden seleccionarse.
+                </mat-hint>
+            </mat-form-field>
+            }
+            } @else if (installation) {
+            <div class="subscription-info">
+                <span>Suscripción</span>
+                <strong>{{ installation.subscriptionName }}</strong>
+            </div>
+            }
+
+            <mat-form-field appearance="outline">
+                <mat-label>Nombre</mat-label>
+
+                <input matInput
+                       autocomplete="off"
+                       [formField]="installationForm.name" />
+
+                @if (installationForm.name().touched() && installationForm.name().invalid()) {
+                <mat-error>
+                    {{ installationForm.name().errors()[0].message }}
+                </mat-error>
+                }
+            </mat-form-field>
+        </div>
+
+        @for (error of installationForm().errors(); track error.kind) {
+        <p class="server-error"
+           role="alert">
+            {{ error.message }}
+        </p>
+        }
+    </mat-dialog-content>
+
+    <mat-dialog-actions align="end">
+        <button mat-button
+                type="button"
+                [disabled]="installationForm().submitting()"
+                (click)="cancel()">
+            Cancelar
+        </button>
+
+        <button mat-flat-button
+                type="submit"
+                [disabled]="
+              installationForm().submitting() ||
+              (!editing && (subscriptionsLoading() || subscriptionsError() !== null))
+            ">
+            @if (installationForm().submitting()) {
+            <span class="submit-content">
+                <mat-spinner diameter="20" />
+                <span>{{ submittingLabel }}</span>
+            </span>
+            } @else {
+            {{ submitLabel }}
+            }
+        </button>
+    </mat-dialog-actions>
+</form>
+}

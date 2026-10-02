@@ -1,0 +1,100 @@
+.form-grid {
+    display: grid;
+    gap: 16px;
+    padding-top: 4px;
+}
+
+mat-form-field {
+    width: 100%;
+}
+
+.subscription-info {
+    display: grid;
+    gap: 4px;
+    padding: 12px 14px;
+    border-radius: 8px;
+    background: var(--mat-sys-surface-container);
+}
+
+.subscription-info span {
+    color: var(--mat-sys-on-surface-variant);
+    font-size: 12px;
+}
+
+.subscriptions-state,
+.subscriptions-error {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 56px;
+}
+
+.subscriptions-error {
+    justify-content: space-between;
+    padding: 12px 14px;
+    border-radius: 8px;
+    background: var(--mat-sys-error-container);
+    color: var(--mat-sys-on-error-container);
+}
+
+.server-error {
+    margin: 8px 0 0;
+    padding: 12px 14px;
+    border-radius: 8px;
+    background: var(--mat-sys-error-container);
+    color: var(--mat-sys-on-error-container);
+}
+
+.submit-content {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.credential-result {
+    display: grid;
+    gap: 16px;
+    min-width: min(520px, calc(100vw - 80px));
+    padding: 8px 0;
+}
+
+.credential-result__icon {
+    width: 40px;
+    height: 40px;
+    color: var(--mat-sys-primary);
+    font-size: 40px;
+}
+
+.credential-result h3,
+.credential-result p {
+    margin: 0;
+}
+
+.credential-field {
+    display: grid;
+    gap: 6px;
+}
+
+.credential-field__label {
+    color: var(--mat-sys-on-surface-variant);
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.credential-field__value {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+    padding: 8px 8px 8px 12px;
+    border-radius: 8px;
+    background: var(--mat-sys-surface-container);
+}
+
+.credential-field__value code {
+    min-width: 0;
+    flex: 1;
+    overflow-wrap: anywhere;
+    user-select: all;
+}
