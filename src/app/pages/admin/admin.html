@@ -20,6 +20,16 @@
           </mat-icon>
           <span matListItemTitle>Suscripciones</span>
         </a>
+        <a mat-list-item
+           routerLink="/installations"
+           routerLinkActive="nav-link--active"
+           (click)="closeMobileMenu()">
+          <mat-icon matListItemIcon
+                    fontSet="material-symbols-outlined">
+            devices
+          </mat-icon>
+          <span matListItemTitle>Instalaciones</span>
+        </a>
       </mat-nav-list>
     </nav>
   </mat-sidenav>

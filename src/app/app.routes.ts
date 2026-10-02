@@ -17,6 +17,11 @@ const routes: Routes = [
           import('@pages/subscriptions/subscriptions').then((component) => component.default),
       },
       {
+        path: 'installations',
+        loadComponent: () =>
+          import('@pages/installations/installations').then((component) => component.default),
+      },
+      {
         path: 'dashboard',
         pathMatch: 'full',
         redirectTo: 'subscriptions',
