@@ -6,6 +6,9 @@ import CreateInstallationResponseInterface from '@model/create-installation-resp
 import DeleteInstallationRequestInterface from '@model/delete-installation-request.interface';
 import DeleteInstallationResponseInterface from '@model/delete-installation-response.interface';
 import GetInstallationsResponseInterface from '@model/get-installations-response.interface';
+import InstallationCredentialRequestInterface from '@model/installation-credential-request.interface';
+import RevokeInstallationCredentialResponseInterface from '@model/revoke-installation-credential-response.interface';
+import RotateInstallationCredentialResponseInterface from '@model/rotate-installation-credential-response.interface';
 import SetInstallationActiveRequestInterface from '@model/set-installation-active-request.interface';
 import SetInstallationActiveResponseInterface from '@model/set-installation-active-response.interface';
 import UpdateInstallationRequestInterface from '@model/update-installation-request.interface';
@@ -85,6 +88,38 @@ export default class InstallationService {
   ): Observable<DeleteInstallationResponseInterface> {
     return this.http.post<DeleteInstallationResponseInterface>(
       `${API_BASE_URL}/admin/installations/delete`,
+      data,
+    );
+  }
+
+  /**
+   * Revokes the active credential of an installation.
+   *
+   * @param data Installation identifier.
+   *
+   * @returns Observable with the revocation response.
+   */
+  revokeCredential(
+    data: InstallationCredentialRequestInterface,
+  ): Observable<RevokeInstallationCredentialResponseInterface> {
+    return this.http.post<RevokeInstallationCredentialResponseInterface>(
+      `${API_BASE_URL}/admin/installations/revoke-credential`,
+      data,
+    );
+  }
+
+  /**
+   * Rotates or generates the active credential of an installation.
+   *
+   * @param data Installation identifier.
+   *
+   * @returns Observable with the newly generated credential.
+   */
+  rotateCredential(
+    data: InstallationCredentialRequestInterface,
+  ): Observable<RotateInstallationCredentialResponseInterface> {
+    return this.http.post<RotateInstallationCredentialResponseInterface>(
+      `${API_BASE_URL}/admin/installations/rotate-credential`,
       data,
     );
   }

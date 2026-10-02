@@ -139,7 +139,8 @@
               class="actions-cell">
             @if (
             changingActivePublicId() === installation.publicId ||
-            deletingPublicId() === installation.publicId
+            deletingPublicId() === installation.publicId ||
+            credentialActionPublicId() === installation.publicId
             ) {
             <mat-spinner diameter="22" />
             } @else {
@@ -166,6 +167,32 @@
                     matTooltip="Activar instalación"
                     (click)="activate(installation)">
               <mat-icon fontSet="material-symbols-outlined">check_circle</mat-icon>
+            </button>
+            }
+
+            @if (installation.hasActiveCredential) {
+            <button mat-icon-button
+                    type="button"
+                    aria-label="Rotar credencial"
+                    matTooltip="Rotar credencial"
+                    (click)="confirmRotateCredential(installation)">
+              <mat-icon fontSet="material-symbols-outlined">autorenew</mat-icon>
+            </button>
+
+            <button mat-icon-button
+                    type="button"
+                    aria-label="Revocar credencial"
+                    matTooltip="Revocar credencial"
+                    (click)="confirmRevokeCredential(installation)">
+              <mat-icon fontSet="material-symbols-outlined">key_off</mat-icon>
+            </button>
+            } @else {
+            <button mat-icon-button
+                    type="button"
+                    aria-label="Generar credencial"
+                    matTooltip="Generar credencial"
+                    (click)="generateCredential(installation)">
+              <mat-icon fontSet="material-symbols-outlined">key</mat-icon>
             </button>
             }
 

@@ -20,13 +20,18 @@ import {
 } from '@angular/material/table';
 import { MatTooltip } from '@angular/material/tooltip';
 import ConfirmDialog from '@components/confirm-dialog/confirm-dialog';
+import InstallationCredentialDialog from '@components/installation-credential-dialog/installation-credential-dialog';
 import InstallationDialog from '@components/installation-dialog/installation-dialog';
 import ConfirmDialogDataInterface from '@model/confirm-dialog-data.interface';
 import DeleteInstallationRequestInterface from '@model/delete-installation-request.interface';
 import DeleteInstallationResponseInterface from '@model/delete-installation-response.interface';
 import GetInstallationsResponseInterface from '@model/get-installations-response.interface';
+import InstallationCredentialDialogDataInterface from '@model/installation-credential-dialog-data.interface';
+import InstallationCredentialRequestInterface from '@model/installation-credential-request.interface';
 import InstallationDialogDataInterface from '@model/installation-dialog-data.interface';
 import InstallationInterface from '@model/installation.interface';
+import RevokeInstallationCredentialResponseInterface from '@model/revoke-installation-credential-response.interface';
+import RotateInstallationCredentialResponseInterface from '@model/rotate-installation-credential-response.interface';
 import SetInstallationActiveRequestInterface from '@model/set-installation-active-request.interface';
 import SetInstallationActiveResponseInterface from '@model/set-installation-active-response.interface';
 import InstallationService from '@services/installation.service';
@@ -64,6 +69,7 @@ export default class Installations implements OnInit {
   readonly error: WritableSignal<string | null> = signal(null);
   readonly changingActivePublicId: WritableSignal<string | null> = signal(null);
   readonly deletingPublicId: WritableSignal<string | null> = signal(null);
+  readonly credentialActionPublicId: WritableSignal<string | null> = signal(null);
 
   readonly displayedColumns: string[] = [
     'name',
@@ -210,6 +216,85 @@ export default class Installations implements OnInit {
   }
 
   /**
+   * Opens a confirmation dialog before revoking the active installation credential.
+   *
+   * @param installation Installation whose credential must be revoked.
+   *
+   * @returns void
+   */
+  confirmRevokeCredential(installation: InstallationInterface): void {
+    const data: ConfirmDialogDataInterface = {
+      title: 'Revocar credencial',
+      message:
+        `¿Quieres revocar la credencial activa de "${installation.name}"? ` +
+        'La instalación dejará de poder autenticarse hasta que generes una nueva credencial.',
+      confirmLabel: 'Revocar',
+      cancelLabel: 'Cancelar',
+    };
+
+    const dialogRef: MatDialogRef<ConfirmDialog, boolean> = this.dialog.open<
+      ConfirmDialog,
+      ConfirmDialogDataInterface,
+      boolean
+    >(ConfirmDialog, {
+      width: '480px',
+      maxWidth: 'calc(100vw - 32px)',
+      data,
+    });
+
+    dialogRef.afterClosed().subscribe((confirmed: boolean | undefined) => {
+      if (confirmed === true) {
+        this.revokeCredential(installation);
+      }
+    });
+  }
+
+  /**
+   * Opens a confirmation dialog before rotating an active installation credential.
+   *
+   * @param installation Installation whose credential must be rotated.
+   *
+   * @returns void
+   */
+  confirmRotateCredential(installation: InstallationInterface): void {
+    const data: ConfirmDialogDataInterface = {
+      title: 'Rotar credencial',
+      message:
+        `¿Quieres generar una nueva credencial para "${installation.name}"? ` +
+        'La credencial actual quedará revocada inmediatamente.',
+      confirmLabel: 'Rotar',
+      cancelLabel: 'Cancelar',
+    };
+
+    const dialogRef: MatDialogRef<ConfirmDialog, boolean> = this.dialog.open<
+      ConfirmDialog,
+      ConfirmDialogDataInterface,
+      boolean
+    >(ConfirmDialog, {
+      width: '480px',
+      maxWidth: 'calc(100vw - 32px)',
+      data,
+    });
+
+    dialogRef.afterClosed().subscribe((confirmed: boolean | undefined) => {
+      if (confirmed === true) {
+        this.rotateCredential(installation);
+      }
+    });
+  }
+
+  /**
+   * Generates a credential for an installation that currently has none.
+   *
+   * @param installation Installation that needs a new credential.
+   *
+   * @returns void
+   */
+  generateCredential(installation: InstallationInterface): void {
+    this.rotateCredential(installation);
+  }
+
+  /**
    * Deletes an installation from the API and reloads the installations list.
    *
    * @param installation Installation to delete.
@@ -330,6 +415,155 @@ export default class Installations implements OnInit {
           duration: 4000,
         });
       },
+    });
+  }
+
+  /**
+   * Revokes the active credential of an installation.
+   *
+   * @param installation Installation whose credential must be revoked.
+   *
+   * @returns void
+   */
+  private revokeCredential(installation: InstallationInterface): void {
+    if (this.credentialActionPublicId() !== null) {
+      return;
+    }
+
+    const request: InstallationCredentialRequestInterface = {
+      publicId: installation.publicId,
+    };
+
+    this.credentialActionPublicId.set(installation.publicId);
+
+    this.installationService.revokeCredential(request).subscribe({
+      next: (response: RevokeInstallationCredentialResponseInterface) => {
+        this.credentialActionPublicId.set(null);
+
+        if (response.status !== 'ok') {
+          this.snackBar.open('No se ha podido revocar la credencial.', 'Cerrar', {
+            duration: 4000,
+          });
+          return;
+        }
+
+        this.snackBar.open(
+          response.revokedCount > 0
+            ? 'Credencial revocada correctamente.'
+            : 'La instalación ya no tenía una credencial activa.',
+          'Cerrar',
+          {
+            duration: 4000,
+          },
+        );
+
+        this.load();
+      },
+      error: (error: unknown) => {
+        this.credentialActionPublicId.set(null);
+
+        if (error instanceof HttpErrorResponse && error.status === 404) {
+          this.snackBar.open('La instalación ya no existe.', 'Cerrar', {
+            duration: 4000,
+          });
+          this.load();
+          return;
+        }
+
+        this.snackBar.open('No se ha podido revocar la credencial.', 'Cerrar', {
+          duration: 4000,
+        });
+      },
+    });
+  }
+
+  /**
+   * Rotates or generates the active credential of an installation.
+   *
+   * @param installation Installation whose credential must be generated.
+   *
+   * @returns void
+   */
+  private rotateCredential(installation: InstallationInterface): void {
+    if (this.credentialActionPublicId() !== null) {
+      return;
+    }
+
+    const hadActiveCredential: boolean = installation.hasActiveCredential;
+
+    const request: InstallationCredentialRequestInterface = {
+      publicId: installation.publicId,
+    };
+
+    this.credentialActionPublicId.set(installation.publicId);
+
+    this.installationService.rotateCredential(request).subscribe({
+      next: (response: RotateInstallationCredentialResponseInterface) => {
+        this.credentialActionPublicId.set(null);
+
+        if (response.status !== 'ok') {
+          this.snackBar.open('No se ha podido generar la credencial.', 'Cerrar', {
+            duration: 4000,
+          });
+          return;
+        }
+
+        this.openCredentialDialog(
+          response.credential.keyId,
+          response.credential.secret,
+          hadActiveCredential,
+        );
+      },
+      error: (error: unknown) => {
+        this.credentialActionPublicId.set(null);
+
+        if (error instanceof HttpErrorResponse && error.status === 404) {
+          this.snackBar.open('La instalación ya no existe.', 'Cerrar', {
+            duration: 4000,
+          });
+          this.load();
+          return;
+        }
+
+        this.snackBar.open('No se ha podido generar la credencial.', 'Cerrar', {
+          duration: 4000,
+        });
+      },
+    });
+  }
+
+  /**
+   * Shows a newly generated installation credential.
+   *
+   * @param keyId Public identifier of the credential.
+   * @param secret Secret value shown only once.
+   * @param rotated Whether an existing credential has been replaced.
+   *
+   * @returns void
+   */
+  private openCredentialDialog(keyId: string, secret: string, rotated: boolean): void {
+    const data: InstallationCredentialDialogDataInterface = {
+      title: rotated ? 'Credencial rotada' : 'Credencial generada',
+      message: rotated
+        ? 'La credencial anterior ha quedado revocada y esta es la nueva credencial activa.'
+        : 'La instalación ya dispone de una nueva credencial activa.',
+      keyId,
+      secret,
+    };
+
+    const dialogRef: MatDialogRef<InstallationCredentialDialog, void> = this.dialog.open<
+      InstallationCredentialDialog,
+      InstallationCredentialDialogDataInterface,
+      void
+    >(InstallationCredentialDialog, {
+      width: '640px',
+      maxWidth: 'calc(100vw - 32px)',
+      disableClose: true,
+      data,
+    });
+
+    dialogRef.afterClosed().subscribe(() => {
+      this.load();
     });
   }
 
