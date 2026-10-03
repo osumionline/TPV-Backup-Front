@@ -1,0 +1,50 @@
+name: Deploy Angular App to Plesk
+
+on:
+  push:
+    branches: ['main']
+  workflow_dispatch:
+
+env:
+  BUILD_DIR: dist/browser
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    concurrency:
+      group: deploy-angular
+      cancel-in-progress: false
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Angular (production)
+        run: npm run build -- --configuration production
+
+      - name: Validate build output
+        run: |
+          if [ ! -f "${{ env.BUILD_DIR }}/index.html" ]; then
+            echo "ERROR: No se encontró index.html en ${{ env.BUILD_DIR }}"; exit 1
+          fi
+          echo "Build OK: index.html encontrado."
+
+      - name: Upload and Deploy via SCP
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          source: '${{ env.BUILD_DIR }}/*'
+          strip_components: 2 # Elimina "dist/browser" de la ruta al subir para que el contenido quede en la raíz del destino
+          target: '${{ secrets.REMOTE_PUBLIC_DIR }}'
+          rm: true
