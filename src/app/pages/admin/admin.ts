@@ -64,6 +64,11 @@ export default class Admin {
     }
   }
 
+  /**
+   * Clears the current session and returns to the login page.
+   *
+   * @returns void
+   */
   logout(): void {
     this.authService.clearSession();
     void this.router.navigateByUrl('/login');
