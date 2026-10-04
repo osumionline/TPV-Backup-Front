@@ -186,6 +186,9 @@ export default class Audit implements OnInit {
       case 'installation.authenticate':
         return 'Instalación autenticada';
 
+      case 'backup.create':
+        return 'Copia creada';
+
       default:
         return action;
     }
