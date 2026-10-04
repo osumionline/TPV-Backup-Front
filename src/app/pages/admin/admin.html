@@ -30,6 +30,16 @@
           </mat-icon>
           <span matListItemTitle>Instalaciones</span>
         </a>
+        <a mat-list-item
+           routerLink="/backups"
+           routerLinkActive="nav-link--active"
+           (click)="closeMobileMenu()">
+          <mat-icon matListItemIcon
+                    fontSet="material-symbols-outlined">
+            cloud_done
+          </mat-icon>
+          <span matListItemTitle>Copias de seguridad</span>
+        </a>
       </mat-nav-list>
     </nav>
   </mat-sidenav>

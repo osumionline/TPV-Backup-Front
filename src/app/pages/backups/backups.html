@@ -1,0 +1,177 @@
+<section class="page">
+  <header class="page-header">
+    <div>
+      <p class="page-header__eyebrow">Gestión</p>
+      <h1>Copias de seguridad</h1>
+      <p class="page-header__description">
+        Copias OTPV almacenadas por las instalaciones registradas.
+      </p>
+    </div>
+  </header>
+
+  <mat-card appearance="outlined">
+    @if (loading()) {
+    <div class="state">
+      <mat-spinner diameter="36" />
+      <p>Cargando copias de seguridad...</p>
+    </div>
+    } @else if (error(); as errorMessage) {
+    <div class="state state--error">
+      <mat-icon fontSet="material-symbols-outlined">error</mat-icon>
+
+      <p>{{ errorMessage }}</p>
+
+      <button mat-stroked-button
+              type="button"
+              (click)="load()">
+        Reintentar
+      </button>
+    </div>
+    } @else if (backups().length === 0) {
+    <div class="state">
+      <mat-icon fontSet="material-symbols-outlined">cloud_done</mat-icon>
+
+      <h2>No hay copias de seguridad</h2>
+
+      <p>Todavía no se ha almacenado ninguna copia.</p>
+    </div>
+    } @else {
+    <div class="table-wrapper">
+      <table mat-table
+             [dataSource]="backups()"
+             aria-label="Listado de copias de seguridad">
+
+        <ng-container matColumnDef="backup">
+          <th mat-header-cell
+              *matHeaderCellDef>
+            Copia
+          </th>
+
+          <td mat-cell
+              *matCellDef="let backup">
+            <strong>{{ backup.originalFilename }}</strong>
+            <small class="secondary">{{ backup.backupId }}</small>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="installation">
+          <th mat-header-cell
+              *matHeaderCellDef>
+            Instalación
+          </th>
+
+          <td mat-cell
+              *matCellDef="let backup">
+            <strong>{{ backup.installationName ?? 'No disponible' }}</strong>
+
+            @if (backup.installationPublicId) {
+            <small class="secondary">{{ backup.installationPublicId }}</small>
+            }
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="subscription">
+          <th mat-header-cell
+              *matHeaderCellDef>
+            Suscripción
+          </th>
+
+          <td mat-cell
+              *matCellDef="let backup">
+            {{ backup.subscriptionName ?? 'No disponible' }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="createdAt">
+          <th mat-header-cell
+              *matHeaderCellDef>
+            Fecha de copia
+          </th>
+
+          <td mat-cell
+              *matCellDef="let backup">
+            {{ formatDate(backup.createdAtClient) }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="version">
+          <th mat-header-cell
+              *matHeaderCellDef>
+            TPV Client
+          </th>
+
+          <td mat-cell
+              *matCellDef="let backup">
+            <strong>{{ backup.applicationVersion }}</strong>
+            <small class="secondary">OTPV v{{ backup.formatVersion }}</small>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="schema">
+          <th mat-header-cell
+              *matHeaderCellDef>
+            Esquema
+          </th>
+
+          <td mat-cell
+              *matCellDef="let backup">
+            v{{ backup.databaseSchemaVersion }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="size">
+          <th mat-header-cell
+              *matHeaderCellDef>
+            Tamaño
+          </th>
+
+          <td mat-cell
+              *matCellDef="let backup">
+            {{ formatSize(backup.sizeBytes) }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell
+              *matHeaderCellDef>
+            Acciones
+          </th>
+
+          <td mat-cell
+              *matCellDef="let backup"
+              class="actions-cell">
+            @if (
+            downloadingPublicId() === backup.publicId ||
+            deletingPublicId() === backup.publicId
+            ) {
+            <mat-spinner diameter="22" />
+            } @else {
+            <button mat-icon-button
+                    type="button"
+                    aria-label="Descargar copia de seguridad"
+                    matTooltip="Descargar copia"
+                    (click)="download(backup)">
+              <mat-icon fontSet="material-symbols-outlined">download</mat-icon>
+            </button>
+
+            <button mat-icon-button
+                    type="button"
+                    aria-label="Eliminar copia de seguridad"
+                    matTooltip="Eliminar copia"
+                    (click)="confirmDelete(backup)">
+              <mat-icon fontSet="material-symbols-outlined">delete</mat-icon>
+            </button>
+            }
+          </td>
+        </ng-container>
+
+        <tr mat-header-row
+            *matHeaderRowDef="displayedColumns"></tr>
+
+        <tr mat-row
+            *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+    </div>
+    }
+  </mat-card>
+</section>

@@ -22,6 +22,11 @@ const routes: Routes = [
           import('@pages/installations/installations').then((component) => component.default),
       },
       {
+        path: 'backups',
+        loadComponent: () =>
+          import('@pages/backups/backups').then((component) => component.default),
+      },
+      {
         path: 'dashboard',
         pathMatch: 'full',
         redirectTo: 'subscriptions',
