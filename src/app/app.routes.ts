@@ -27,6 +27,10 @@ const routes: Routes = [
           import('@pages/backups/backups').then((component) => component.default),
       },
       {
+        path: 'audit',
+        loadComponent: () => import('@pages/audit/audit').then((component) => component.default),
+      },
+      {
         path: 'dashboard',
         pathMatch: 'full',
         redirectTo: 'subscriptions',

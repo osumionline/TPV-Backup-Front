@@ -1,0 +1,143 @@
+<section class="page">
+    <header class="page-header">
+        <div>
+            <p class="page-header__eyebrow">Sistema</p>
+            <h1>Auditoría</h1>
+            <p class="page-header__description">
+                Histórico de acciones administrativas y eventos automáticos.
+            </p>
+        </div>
+    </header>
+
+    <mat-card appearance="outlined">
+        @if (loading()) {
+        <div class="state">
+            <mat-spinner diameter="36" />
+            <p>Cargando registro de auditoría...</p>
+        </div>
+        } @else if (error(); as errorMessage) {
+        <div class="state state--error">
+            <mat-icon fontSet="material-symbols-outlined">error</mat-icon>
+
+            <p>{{ errorMessage }}</p>
+
+            <button mat-stroked-button
+                    type="button"
+                    (click)="load()">
+                Reintentar
+            </button>
+        </div>
+        } @else if (auditLogs().length === 0) {
+        <div class="state">
+            <mat-icon fontSet="material-symbols-outlined">history</mat-icon>
+            <h2>No hay eventos de auditoría</h2>
+            <p>Todavía no se ha registrado ninguna actividad.</p>
+        </div>
+        } @else {
+        <div class="table-wrapper">
+            <table mat-table
+                   [dataSource]="auditLogs()"
+                   aria-label="Registro de auditoría">
+
+                <ng-container matColumnDef="createdAt">
+                    <th mat-header-cell
+                        *matHeaderCellDef>
+                        Fecha
+                    </th>
+
+                    <td mat-cell
+                        *matCellDef="let auditLog">
+                        {{ formatDate(auditLog.createdAt) }}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="actor">
+                    <th mat-header-cell
+                        *matHeaderCellDef>
+                        Actor
+                    </th>
+
+                    <td mat-cell
+                        *matCellDef="let auditLog">
+                        <strong>{{ actorLabel(auditLog) }}</strong>
+
+                        @if (auditLog.actorPublicId) {
+                        <small class="secondary">{{ auditLog.actorPublicId }}</small>
+                        }
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="action">
+                    <th mat-header-cell
+                        *matHeaderCellDef>
+                        Acción
+                    </th>
+
+                    <td mat-cell
+                        *matCellDef="let auditLog">
+                        <strong>{{ actionLabel(auditLog.action) }}</strong>
+                        <small class="secondary">{{ auditLog.action }}</small>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="entity">
+                    <th mat-header-cell
+                        *matHeaderCellDef>
+                        Entidad
+                    </th>
+
+                    <td mat-cell
+                        *matCellDef="let auditLog">
+                        <strong>{{ entityLabel(auditLog.entityType) }}</strong>
+
+                        @if (auditLog.entityPublicId) {
+                        <small class="secondary">{{ auditLog.entityPublicId }}</small>
+                        }
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="ip">
+                    <th mat-header-cell
+                        *matHeaderCellDef>
+                        IP
+                    </th>
+
+                    <td mat-cell
+                        *matCellDef="let auditLog">
+                        <span [matTooltip]="auditLog.userAgent ?? ''">
+                            {{ auditLog.ip ?? '—' }}
+                        </span>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="data">
+                    <th mat-header-cell
+                        *matHeaderCellDef>
+                        Detalles
+                    </th>
+
+                    <td mat-cell
+                        *matCellDef="let auditLog"
+                        class="details-cell">
+                        <code>{{ formatData(auditLog.data) }}</code>
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row
+                    *matHeaderRowDef="displayedColumns"></tr>
+
+                <tr mat-row
+                    *matRowDef="let row; columns: displayedColumns"></tr>
+            </table>
+        </div>
+
+        <mat-paginator [length]="total()"
+                       [pageIndex]="pageIndex()"
+                       [pageSize]="pageSize()"
+                       [pageSizeOptions]="pageSizeOptions"
+                       showFirstLastButtons
+                       aria-label="Paginación del registro de auditoría"
+                       (page)="pageChanged($event)" />
+        }
+    </mat-card>
+</section>
