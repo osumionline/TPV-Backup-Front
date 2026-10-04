@@ -183,6 +183,9 @@ export default class Audit implements OnInit {
       case 'backup.retention_delete':
         return 'Copia eliminada por retención';
 
+      case 'installation.authenticate':
+        return 'Instalación autenticada';
+
       default:
         return action;
     }
