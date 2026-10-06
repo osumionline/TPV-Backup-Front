@@ -156,7 +156,8 @@ export default class Subscriptions implements OnInit {
       title: 'Desactivar suscripción',
       message:
         `¿Quieres desactivar la suscripción "${subscription.name}"? ` +
-        'Sus instalaciones dejarán de poder enviar nuevas copias mientras permanezca desactivada.',
+        'Sus instalaciones no podrán autenticarse ni acceder a sus copias remotas ' +
+        'mientras permanezca desactivada.',
       confirmLabel: 'Desactivar',
       cancelLabel: 'Cancelar',
     };
